@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.0/p5.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.0/addons/p5.sound.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/p5.capture@1.4.1/dist/p5.capture.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js-capture/1.0.1/p5.capture.min.js"></script>
+<script src="sketch.js" defer></script>
+<style>
+body {
+    font-family: Helvetica, sans-serif;
+    background-color: #000;
+    font-weight: normal;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+#title-point {
+    color: #ffffff;
+    margin-bottom: 30px;
+    position: fixed;
+    z-index: 100;
+    visibility: hidden;
+    left: 20px;
+    top: 5px;
+    font-size: 18px;
+    font-weight: normal;
+}
+
+#drop_zone {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 60%;
+    background-color: #ffffff00;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ffffff;
+    font-size: 40px;
+    z-index: 100;
+}
+
+#arrow-image1 {
+    width: 120px;
+    position: absolute;
+    top: 48%;
+    left: calc(50% + 200px);
+    transform: rotate(180deg);
+}
+
+#arrow-image2 {
+    width: 120px;
+    position: absolute;
+    top: calc(45% - 200px);
+    left: 47%;
+    transform: rotate(90deg);
+}
+
+#arrow-image3 {
+    width: 120px;
+    position: absolute;
+    top: 48%;
+    right: calc(50% + 200px);
+}
+
+#arrow-image4 {
+    width: 120px;
+    position: absolute;
+    bottom: calc(35% - 200px);
+    left: 47%;
+    transform: rotate(270deg);
+}
+
+#obj-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    text-align: center;
+    color: #ffffff;
+    z-index: 101;
+}
+
+
+        #animate-text, #disable-text {
+            position: absolute;
+            color: #ffffff;
+            width: 100px;
+            bottom: 58px;
+            left: 32.5vw;
+            visibility: hidden;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 130;
+        }
+
+        #rotate-anim, #disable-text2 {
+            position: absolute;
+            color: #ffffff;
+            bottom: 58px;
+            left: 85vw;
+            visibility: hidden;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #reset {
+            position: absolute;
+            color: #ffffff;
+            bottom: 14px;
+            left: 85vw;
+            visibility: hidden;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #random {
+            position: absolute;
+            color: #ffffff;
+            bottom: 92px;
+            left: 85vw;
+            visibility: hidden;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #ortho, #disable-text4{
+            position: absolute;
+            color: #ffffff;
+            bottom: 36px;
+            left: 85vw;
+            visibility: hidden;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #export-video {
+            position: absolute;
+            color: #ffffff;
+            bottom: 14px;
+            left: 92vw;
+            right: 2px;
+            visibility: hidden;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #export-stop {
+            position: absolute;
+            color: #ffffff;
+            bottom: 14px;
+            left: 92vw;
+            visibility: hidden;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #export-img {
+            position: absolute;
+            color: #ffffff;
+            bottom: 36px;
+            left: 92vw;
+            visibility: hidden;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        #size-general, #disable-text3 {
+            position: absolute;
+            color: #ffffff;
+            bottom: 58px;
+            left: 2vw;
+            visibility: hidden;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 120;
+        }
+
+        #noise-text, #disable-text5 {
+            position: absolute;
+            color: #ffffff;
+            width: 100px;
+            bottom: 58px;
+            left: 62vw;
+            visibility: hidden;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 130;
+        }
+
+
+        .p5c-container {
+            display: none !important;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        .sizex-group {
+            z-index: 120;
+            position: absolute;
+            bottom: 100px;
+            left: 4vw;
+        }
+
+        #sizeX {
+            color: #828282;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+        #sizeX:hover {
+            display: none;
+        }
+        
+
+        .box {
+            width: 200px;
+            transform: rotate(270deg);
+            padding: 20px;
+            position: absolute;
+            top: -61.4px;
+            left: -69px;
+            margin-right: 0px;
+            visibility: hidden;
+        }
+
+        .input-range {
+            appearance: none;
+            width: 50%; 
+            height: 3px;
+           background-color: #323232;
+            border-radius: 5px;
+        }
+
+        .input-range::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            cursor: pointer;
+            background: url('s.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform: rotate(90deg) translateX(1px) translateY(-1px);
+        }
+
+        .sizey-group {
+            z-index: 120;
+            position: absolute;
+            bottom: 100px;
+            left: 9vw;
+        }
+
+        #sizeY {
+            color: #828282;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+
+        .box2 {
+            width: 200px;
+            transform: rotate(270deg);
+            padding: 20px;
+            position: absolute;
+            top: -61.4px;
+            left: -70px;
+            margin-right: 0px;
+            visibility: hidden;
+        }
+
+        .input-range2 {
+            appearance: none;
+            width: 50%; 
+            height: 3px;
+            background-color: #323232;
+            border-radius: 5px;
+        }
+
+        .input-range2::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            cursor: pointer;
+            background: url('s.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform: rotate(90deg) translateX(1px) translateY(-1px);
+        }
+
+        .sizez-group {
+            z-index: 120;
+            position: absolute;
+            bottom: 100px;
+            left: 14vw;
+        }
+
+        #sizeZ {
+            color: #828282;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+
+        .box3 {
+            width: 200px;
+            transform: rotate(270deg);
+            padding: 20px;
+            position: absolute;
+            top: -61.4px;
+            left: -70px;
+            margin-right: 0px;
+            visibility: hidden;
+        }
+
+        .input-range3 {
+            appearance: none;
+            width: 50%; 
+            height: 3px;
+            background-color: #323232;
+            border-radius: 5px;
+        }
+
+        .input-range3::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10px;
+            height: 10px;
+            cursor: pointer;
+            background: url('s.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform: rotate(90deg) translateX(1px) translateY(-1px);
+        }
+
+        .pointsize-group {
+            z-index: 120;
+            position: absolute;
+            bottom: 100px;
+            left: 19vw;
+        }
+
+        #pointsize {
+            color: #828282;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+
+        .box8 {
+            width: 200px;
+            transform: rotate(270deg);
+            padding: 20px;
+            position: absolute;
+            top: -61.4px;
+            left: -70.5px;
+            margin-right: 0px;
+            visibility: hidden;
+        }
+
+        .input-range8 {
+            appearance: none;
+            width: 50%; 
+            height: 3px;
+            background-color: #323232;
+            border-radius: 5px;
+        }
+
+        .input-range8::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+            background: url('p.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform: rotate(90deg) translateX(2.5px) translateY(3px);
+        }
+
+        .noise-group {
+            z-index: 120;
+            position: absolute;
+            bottom: 100px;
+            left: 69vw;
+        }
+
+        #noise {
+            color: #828282;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+
+        .box9 {
+            width: 200px;
+            transform: rotate(270deg);
+            padding: 20px;
+            position: absolute;
+            top: -61.4px;
+            left: -70.5px;
+            margin-right: 0px;
+            visibility: hidden;
+        }
+
+        .input-range9 {
+            appearance: none;
+            width: 50%; 
+            height: 3px;
+            background-color: #323232;
+            border-radius: 5px;
+        }
+
+        .input-range9::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 10.5px;
+            height: 10.5px;
+            cursor: pointer;
+            background: url('s.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform: rotate(90deg) translateX(1px) translateY(-0.9px);
+        }
+        
+
+        .noise1-group, .noise2-group  {
+            z-index: 120;
+            position: absolute;
+            bottom: 100px;
+            left: 64vw;
+        }
+
+        #noise-1 {
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+
+        #noise-2 {
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+
+
+        .wave1-group, .wave2-group,  .wave3-group, .wave4-group  {
+            z-index: 120;
+            position: absolute;
+            bottom: 100px;
+            left: 36.5vw;
+        }
+
+        #wave-1 {
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+
+        #wave-2 {
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+
+        #wave-3 {
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+
+        #wave-4 {
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+
+        .frequency-group {
+            z-index: 120;
+            position: absolute;
+            bottom: 100px;
+            left: 42vw;
+        }
+
+        #wave-button {
+            color: #828282;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+
+        .box4 {
+            width: 200px;
+            transform: rotate(270deg);
+            padding: 20px;
+            position: absolute;
+            top: -61.4px;
+            left: -68.6px;
+            margin-right: 0px;
+            visibility: hidden;
+        }
+
+        .input-range4 {
+            appearance: none;
+            width: 50%; 
+            height: 3px;
+            background-color: #323232;
+            border-radius: 5px;
+        }
+
+        .input-range4::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+            background: url('f.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform: rotate(90deg) translateX(4.5px) translateY(-1px);
+        }
+
+        .box5 {
+            width: 200px;
+            transform: rotate(270deg);
+            padding: 20px;
+            position: absolute;
+            top: -61.4px;
+            left: -68.6px;
+            margin-right: 0px;
+            visibility: hidden;
+        }
+
+        .input-range5 {
+            appearance: none;
+            width: 50%; 
+            height: 3px;
+            background-color: #323232;
+            border-radius: 5px;
+        }
+
+        .input-range5::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+            background: url('f.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform: rotate(90deg) translateX(4.5px) translateY(-1px);
+        }
+
+        .box6 {
+            width: 200px;
+            transform: rotate(270deg);
+            padding: 20px;
+            position: absolute;
+            top: -61.4px;
+            left: -68.6px;
+            margin-right: 0px;
+            visibility: hidden;
+        }
+
+        .input-range6 {
+            appearance: none;
+            width: 50%; 
+            height: 3px;
+            background-color: #323232;
+            border-radius: 5px;
+        }
+
+        .input-range6::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+            background: url('f.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform: rotate(90deg) translateX(4.5px) translateY(-1px);
+        }
+
+        .box10 {
+            width: 200px;
+            transform: rotate(270deg);
+            padding: 20px;
+            position: absolute;
+            top: -61.4px;
+            left: -68.6px;
+            margin-right: 0px;
+            visibility: hidden;
+        }
+
+        .input-range10 {
+            appearance: none;
+            width: 50%; 
+            height: 3px;
+            background-color: #323232;
+            border-radius: 5px;
+        }
+
+        .input-range10::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+            background: url('f.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform: rotate(90deg) translateX(4.5px) translateY(-1px);
+        }
+
+        .height-group {
+            z-index: 120;
+            position: absolute;
+            bottom: 100px;
+            left: 49.5vw;
+        }
+
+        #wave-height {
+            color: #828282;
+            cursor: pointer;
+            font-size: 18px;
+            visibility: hidden;
+            position: absolute;
+            top: 30px;
+            left: 60px;
+        }
+
+        .box7 {
+            width: 200px;
+            transform: rotate(270deg);
+            padding: 20px;
+            position: absolute;
+            top: -61.4px;
+            left: -70px;
+            margin-right: 0px;
+            visibility: hidden;
+        }
+
+        .input-range7 {
+            appearance: none;
+            width: 50%; 
+            height: 3px;
+            background-color: #323232;
+            border-radius: 5px;
+        }
+
+        .input-range7::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 13px;
+            height: 13px;
+            cursor: pointer;
+            background: url('h.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            transform: rotate(90deg) translateX(2px) translateY(-0.9px);
+        }
+
+        @media screen and (max-width: 1250px) {
+
+
+        #rotate-anim, #disable-text2 {
+            display: none;
+        }
+
+        #reset {    
+            display: none;
+        }
+
+        #random {
+            display: none;
+        }
+
+        #ortho, #disable-text4{
+            display: none;
+        }
+
+        #export-video {
+            display: none;
+        }
+
+        #export-stop {
+            display: none;
+        }
+
+        #export-img {
+            display: none;
+        }
+
+        #noise-text, #disable-text5 {
+            left: 75vw
+        }
+
+        .noise1-group, .noise2-group {
+            left: 78vw;
+        }
+
+        .noise-group {
+            left: 85vw;
+        }
+
+        #animate-text, #disable-text {
+            left: 37vw;
+        }
+
+        .wave1-group, .wave2-group,  .wave3-group, .wave4-group {
+            left: 40vw;
+        }
+
+        .frequency-group {
+            left: 47.5vw;
+        }
+
+        .height-group {
+            left: 56.5vw;
+        }
+
+        .sizex-group {
+            left: 6vw;
+        }
+
+        .sizey-group {
+            left: 11.5vw;
+        }
+        .sizez-group {
+            left: 17vw;
+        }
+        .pointsize-group {
+            left: 22.5vw;
+        }
+
+        @media screen and (max-width: 950px) {
+            #noise-text, #disable-text5 {
+            display: none;
+        }
+
+        .noise1-group, .noise2-group {
+            display: none;
+        }
+
+        .noise-group {
+            display: none;
+        }
+
+        #animate-text, #disable-text {
+            left: 53vw;
+        }
+
+        .wave1-group, .wave2-group,  .wave3-group, .wave4-group {
+            left: 57vw;
+        }
+
+        .frequency-group {
+            left: 70vw;
+        }
+
+        .height-group {
+            left: 84vw;
+        }
+
+        .sizex-group {
+            left: 8vw;
+        }
+
+        .sizey-group {
+            left: 16vw;
+        }
+        .sizez-group {
+            left: 24vw;
+        }
+        .pointsize-group {
+            left: 32vw;
+        }
+
+        #arrow-image1 {
+    width: 120px;
+    position: absolute;
+    top: 48%;
+    left: calc(50% + 200px);
+    transform: rotate(180deg);
+}
+
+#arrow-image2 {
+    width: 120px;
+    position: absolute;
+    top: calc(45% - 200px);
+    left: 43%;
+    transform: rotate(90deg);
+}
+
+#arrow-image3 {
+    width: 120px;
+    position: absolute;
+    top: 48%;
+    right: calc(50% + 200px);
+}
+
+#arrow-image4 {
+    width: 120px;
+    position: absolute;
+    bottom: calc(35% - 200px);
+    left: 43%;
+    transform: rotate(270deg);
+}
+
+        }
+
+        @media screen and (max-width: 670px) {
+
+
+        #animate-text, #disable-text {
+            display: none;
+        }
+
+        .wave1-group, .wave2-group,  .wave3-group, .wave4-group {
+            display: none;
+        }
+
+        .frequency-group {
+        display: none;
+        }
+
+        .height-group {
+            display: none;
+        }
+
+        #arrow-image1, #arrow-image2, #arrow-image3, #arrow-image4 {
+            display: none;
+        }
+        .sizex-group {
+    left: 14vw;
+}
+
+.sizey-group {
+    left: 33.33vw;
+}
+
+.sizez-group {
+    left: 52.66vw;
+}
+
+.pointsize-group {
+    left: 72vw;
+}
+
+        }
+
+
+
+}
+    </style>
+</head>
+<body>
+    <h1 id="title-point">pointcloud.xyz</h1>
+    
+    <div id="drop_zone" ondrop="dropHandler(event);" ondragover="dragOverHandler(event);">
+        <p id="obj-text">drop a obj-file!</p>
+    </div>
+
+    <div onmouseover="mouseOverHandler(event);" onmouseleave="mouseLeaveHandler(event);" onclick="mouseClickHandler(event);"> 
+        <p id="animate-text">wave</p>
+        <p id="disable-text">disable</p>
+
+        <p id="rotate-anim">rotate</p>
+        <p id="disable-text2">disable</p>
+        <p id="reset">reset</p>
+        <p id="random">random</p>
+        <p id="ortho">ortho</p>
+        <p id="disable-text4">disable</p>
+
+        <p id="export-img">save img</p>
+        <p id="export-video">save video</p>
+        <p id="export-stop">stop</p>
+
+
+        <p id="size-general">size</p>
+        <p id="disable-text3">disable</p>
+
+        <p id="noise-text">noise</p>
+        <p id="disable-text5">disable</p>
+
+
+        <div class="sizex-group">
+            <p id="sizeX">izeX</p>
+            <div class="box">
+                <div class="inner-box"></div>
+                <div class="line"></div>
+                <input type="range" class="input-range" min="3" max="10" step="0.1" value="0">
+            </div>
+        </div>
+
+        <div class="sizey-group">
+            <p id="sizeY">izeY</p>
+            <div class="box2">
+                <div class="inner-box"></div>
+                <div class="line"></div>
+                <input type="range" class="input-range2" min="3" max="10" step="0.1" value="0">
+            </div>
+        </div>
+
+        <div class="sizez-group">
+            <p id="sizeZ">izeZ</p>
+            <div class="box3">
+                <div class="inner-box"></div>
+                <div class="line"></div>
+                <input type="range" class="input-range3" min="3" max="10" step="0.1" value="0">
+            </div>
+        </div>
+
+        <div class="pointsize-group">
+            <p id="pointsize">ointsize</p>
+            <div class="box8">
+                <div class="inner-box"></div>
+                <div class="line"></div>
+                <input type="range" class="input-range8" min="0" max="10" step="0.1" value="0">
+            </div>
+        </div>
+
+        <div class="noise-group">
+            <p id="noise">trength</p>
+            <div class="box9">
+                <div class="inner-box"></div>
+                <div class="line"></div>
+                <input type="range" class="input-range9" min="0" max="10" step="0.1" value="0">
+            </div>
+        </div>
+
+        <div class="noise1-group">
+            <p id="noise-1">noise1</p>
+        </div>
+
+        <div class="noise2-group">
+            <p id="noise-2">noise2</p>
+        </div>
+
+
+        <div class="wave1-group">
+            <p id="wave-1">wave1</p>
+        </div>
+
+        <div class="wave2-group">
+            <p id="wave-2">wave2</p>
+        </div>
+
+        <div class="wave3-group">
+            <p id="wave-3">wave3</p>
+        </div>
+
+        <div class="wave4-group">
+            <p id="wave-4">wave4</p>
+        </div>
+
+        <div class="frequency-group">
+            <p id="wave-button">requency</p>
+            <div class="box4">
+                <div class="inner-box"></div>
+                <div class="line"></div>
+                <input type="range" class="input-range4" min="0.2" max="10" step="0.1" value="0">
+            </div>
+            <div class="box5">
+                <div class="inner-box"></div>
+                <div class="line"></div>
+                <input type="range" class="input-range5" min="0.2" max="10" step="0.1" value="0">
+            </div>
+            <div class="box6">
+                <div class="inner-box"></div>
+                <div class="line"></div>
+                <input type="range" class="input-range6" min="0.2" max="10" step="0.1" value="0">
+            </div>
+            <div class="box10">
+                <div class="inner-box"></div>
+                <div class="line"></div>
+                <input type="range" class="input-range10" min="0.2" max="10" step="0.1" value="0">
+            </div>
+        </div>
+
+        <div class="height-group">
+            <p id="wave-height">eight</p>
+            <div class="box7">
+                <div class="inner-box"></div>
+                <div class="line"></div>
+                <input type="range" class="input-range7" min="3" max="25" step="0.1" value="0">
+            </div>
+        </div>
+
+        <img id="arrow-image1" src="./arrow.png">
+        <img id="arrow-image2" src="./arrow.png">
+        <img id="arrow-image3" src="./arrow.png">
+        <img id="arrow-image4" src="./arrow.png">
+    </div>
+</body>
+</html>
