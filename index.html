@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>pointcloud.xyz</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.0/p5.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.0/addons/p5.sound.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/p5.capture@1.4.1/dist/p5.capture.umd.min.js"></script>
@@ -131,6 +132,47 @@ body {
             visibility: hidden;
             cursor: pointer;
             font-size: 18px;
+        }
+
+        #invert {
+            position: absolute;
+            color: #ffffff;
+            bottom: 114px;
+            left: 85vw;
+            visibility: hidden;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        body.light-mode {
+            background-color: #ffffff;
+        }
+
+        body.light-mode p,
+        body.light-mode h1 {
+            color: #000000 !important;
+        }
+
+        body.light-mode #sizeX,
+        body.light-mode #sizeY,
+        body.light-mode #sizeZ,
+        body.light-mode #pointsize,
+        body.light-mode #wave-button,
+        body.light-mode #wave-height,
+        body.light-mode #noise {
+            color: #828282 !important;
+        }
+
+        body.light-mode [class*="input-range"] {
+            background-color: #d0d0d0;
+        }
+
+        body.light-mode [class*="input-range"]::-webkit-slider-thumb {
+            filter: invert(1);
+        }
+
+        body.light-mode img {
+            filter: invert(1);
         }
 
         #ortho, #disable-text4{
@@ -749,6 +791,10 @@ body {
             display: none;
         }
 
+        #invert {
+            display: none;
+        }
+
         #ortho, #disable-text4{
             display: none;
         }
@@ -943,6 +989,7 @@ body {
         <p id="disable-text2">disable</p>
         <p id="reset">reset</p>
         <p id="random">random</p>
+        <p id="invert">light</p>
         <p id="ortho">ortho</p>
         <p id="disable-text4">disable</p>
 
