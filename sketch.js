@@ -28,6 +28,7 @@ let wave = 0.1;
 let perlinNoise = 0;
 
 let isRecording = false;
+let lightMode = false;
 
 function setup() {
     var canvas = createCanvas(window.innerWidth, window.innerHeight, WEBGL);
@@ -73,6 +74,7 @@ function setup() {
     exportVideo = select('#export-video');
     stopVideo = select('#export-stop');
     exportImg = select('#export-img');
+    invertButton = select('#invert');
 
     noiseText = select('#noise');
     noiseButton = select('#noise-text');
@@ -110,6 +112,7 @@ function setup() {
         disableText2.style('visibility', 'hidden');
         resetButton.style('visibility', 'hidden');
         randomButton.style('visibility', 'hidden');
+        invertButton.style('visibility', 'hidden');
         orthoButton.style('visibility', 'hidden');
         disableText4.style('visibility', 'hidden');
         exportVideo.style('visibility', 'hidden');
@@ -166,6 +169,7 @@ function setup() {
         rotateAnim.style('visibility', 'visible');
         resetButton.style('visibility', 'visible');
         randomButton.style('visibility', 'visible');
+        invertButton.style('visibility', 'visible');
         exportVideo.style('visibility', 'visible');
         exportImg.style('visibility', 'visible');
         sizeGeneral.style('visibility', 'visible'); 
@@ -504,7 +508,20 @@ function setup() {
                     sliderSizeY = parseFloat(document.querySelector('.input-range2').value);
                     sliderSizeZ = parseFloat(document.querySelector('.input-range3').value);
                     sliderPointSize = parseFloat(document.querySelector('.input-range8').value);
-                }  
+                }
+            });
+
+    invertButton.mouseOver(() => invertButton.style('font-style', 'italic'))
+            .mouseOut(() => invertButton.style('font-style', 'normal'))
+            .mousePressed(() => {
+                lightMode = !lightMode;
+                if (lightMode) {
+                    invertButton.html('dark');
+                    document.body.classList.add('light-mode');
+                } else {
+                    invertButton.html('light');
+                    document.body.classList.remove('light-mode');
+                }
             });
 
     sizeGeneral.mouseOver(() => sizeGeneral.style('font-style', 'italic'))
@@ -697,10 +714,10 @@ function setup() {
 
 function initializeCaptureSystem() {
     P5Capture.setDefaultOptions({
-      format: "webm", 
+      format: "webm",
       framerate: 30,
       quality: 0.95,
-      videoBitsPerSecond: 5000000 
+      videoBitsPerSecond: 5000000
     });
   }
 
@@ -709,13 +726,13 @@ function initializeCaptureSystem() {
     const formatSelect = document.querySelector('#format-select');
     const framerateSelect = document.querySelector('#framerate-select');
     const qualitySelect = document.querySelector('#quality-select');
-    
+
     const selectedFormat = formatSelect ? formatSelect.value : 'webm';
     const selectedFramerate = framerateSelect ? parseInt(framerateSelect.value) : 30;
     const selectedQuality = qualitySelect ? parseFloat(qualitySelect.value) : 0.95;
-    
+
     let capture = P5Capture.getInstance();
-    
+
     if (capture.state === "idle") {
       capture.start({
         format: selectedFormat,
@@ -817,7 +834,7 @@ function initializeCustomSliders() {
 }
 
 function draw(){
-    background(0);
+    background(lightMode ? 255 : 0);
 
    
     if (orbitDrag) {
@@ -888,7 +905,7 @@ function draw(){
                       }
                     
 
-                      stroke(255);
+                      stroke(lightMode ? 0 : 255);
                     strokeWeight(sliderPointSize);
 
                     if (!animateMode) {
@@ -908,6 +925,7 @@ function draw(){
         }
         endShape();
     }
+
 }
 
 function updateCustomSliderValues() {
@@ -961,6 +979,14 @@ function dragOverHandler(ev) {
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight);
   }
+
+
+
+
+
+
+
+
 
 
 
